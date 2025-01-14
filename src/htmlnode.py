@@ -19,3 +19,6 @@ class HTMLNode():
                f"value: {self.value}\n" + \
                f"children: {self.children}\n" + \
                f"props: {self.props}"
+    
+    def __eq__(self, node):
+        return self.tag == node.tag and self.value == node.value and self.children == node.children and self.props == node.props

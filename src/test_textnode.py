@@ -1,6 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
+from leafnode import LeafNode
 
 
 class TestTextNode(unittest.TestCase):
@@ -15,6 +16,7 @@ class TestTextNode(unittest.TestCase):
     def test_print(self):
         node = TextNode("Test text node", TextType.ITALIC)
         self.assertEqual("TextNode(Test text node, italic, None)", str(node))
+
 
 if __name__ == "__main__":
     unittest.main()
