@@ -1,4 +1,4 @@
-from textnode import TextNode, TextType
+from textnode import TextNode
 
 def generate_split_text(text, delimiter):
     ret = []
