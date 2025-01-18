@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from split_delimiter import split_nodes_delimiter, split_nodes_image, split_nodes_link
+from split_delimiter import split_nodes_delimiter, split_nodes_image, split_nodes_link, text_to_textnodes
 
 class TestSplitDelimiter(unittest.TestCase):
     def test_split_delimiter(self):
@@ -83,5 +83,21 @@ class TestSplitDelimiter(unittest.TestCase):
         ]
 
         self.assertEqual(split_nodes_image([node, node2, node3]), expected_nodes)
+    
+    def test_text_to_testnodes(self):
+        nodes = text_to_textnodes("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
+        expected_nodes = [
+            TextNode("This is ", TextType.NORMAL),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.NORMAL),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.NORMAL),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.NORMAL),
+            TextNode("obi wan image", TextType.IMAGES, "https://i.imgur.com/fJRm4Vk.jpeg"),
+            TextNode(" and a ", TextType.NORMAL),
+            TextNode("link", TextType.LINKS, "https://boot.dev"),
+        ]
+        self.assertEqual(nodes, expected_nodes)
 if __name__ == "__main__":
     unittest.main()

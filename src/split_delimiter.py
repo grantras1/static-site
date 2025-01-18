@@ -15,7 +15,6 @@ def generate_split_text(text, delimiter):
         ret.append(delimiter)
     if prepend_delimiter:
         ret.insert(0, delimiter)
-    print(ret)
     return ret
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -76,3 +75,6 @@ def split_nodes_image(old_nodes):
 def split_nodes_link(old_nodes):
     return split_nodes_regex(old_nodes, r"\[.*?\]\(.*?\)", TextType.LINKS)
 
+def text_to_textnodes(text):
+    base_node = TextNode(text, TextType.NORMAL)
+    return split_nodes_link(split_nodes_image(split_nodes_delimiter(split_nodes_delimiter(split_nodes_delimiter([base_node], "**", TextType.BOLD), "*", TextType.ITALIC), "`", TextType.CODE)))
