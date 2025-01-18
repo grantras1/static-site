@@ -1,3 +1,5 @@
+import re
+
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n")
     new_blocks = []
@@ -15,12 +17,27 @@ def markdown_to_blocks(markdown):
         new_blocks.append(current_block)
 
     return new_blocks
-markdown = """# This is a heading" 
 
-This is a paragraph of text. It has some **bold** and *italic* words inside of it.
-
-* This is the first list item in a list block
-* This is a list item
-* This is another list item"""
-
-print(markdown_to_blocks(markdown))
+def block_to_block_type(block):
+    if re.search(r'^#{1,6} \S.*', block):
+        return "heading"
+    elif re.search(r'```.*```', block, re.DOTALL):
+        return "code"
+    elif block[0] == ">":
+        for line in block.split("\n"):
+            if line[0] != ">":
+                return "paragraph"
+        return "quote"
+    elif block[0] == "*" or block[0] == "-":
+        for line in block.split("\n"):
+            if not re.search(r'^[*-] .+', line):
+                return "paragraph"
+        return "unordered_list"
+    elif block[0:3] == "1. ":
+        lines = block.split("\n")
+        for i in range(0, len(lines)):
+            if lines[i][0:3] != f"{i + 1}. ":
+                return "paragraph"
+        return "ordered_list"
+    else:
+        return "paragraph"
