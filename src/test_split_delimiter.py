@@ -84,7 +84,7 @@ class TestSplitDelimiter(unittest.TestCase):
 
         self.assertEqual(split_nodes_image([node, node2, node3]), expected_nodes)
     
-    def test_text_to_testnodes(self):
+    def test_text_to_textnodes(self):
         nodes = text_to_textnodes("This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
         expected_nodes = [
             TextNode("This is ", TextType.NORMAL),
