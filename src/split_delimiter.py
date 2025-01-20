@@ -2,6 +2,7 @@ import re
 from time import sleep
 
 from textnode import TextNode, TextType
+from leafnode import LeafNode
 from markdown_extraction import extract_markdown_images, extract_markdown_links
 
 

@@ -21,12 +21,4 @@ class HTMLNode():
                f"props: {self.props}\n"
     
     def __eq__(self, node):
-        try:
-            return self.tag == node.tag and self.value == node.value and self.children == node.children and self.props == node.props
-        except AttributeError:
-            print("====")
-            print(self)
-            print("====")
-            print(node)
-            print("====")
-            raise AttributeError
+        return self.tag == node.tag and self.value == node.value and self.children == node.children and self.props == node.props

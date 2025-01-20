@@ -1,7 +1,8 @@
 import re
 from itertools import takewhile, chain
 
-from htmlnode import HTMLNode
+from parentnode import ParentNode
+from leafnode import LeafNode
 from split_delimiter import text_to_textnodes
 
 MARKDOWN_TYPE_CONVERSION = {
@@ -63,30 +64,29 @@ def text_to_children(text):
 
 def markdown_to_html_node(markdown):
     blocks = markdown_to_blocks(markdown)
-    print(blocks)
     top_level_nodes = []
     for block in blocks:
         type = block_to_block_type(block)
         if type == "heading":
             header_level = sum(1 for _ in takewhile(lambda x: x == '#', block))
             child_nodes = text_to_children(block.replace("#", "").lstrip())
-            top_level_nodes.append(HTMLNode(f"h{header_level}", None, child_nodes))
+            top_level_nodes.append(ParentNode(f"h{header_level}", child_nodes))
         elif type == "code":
-            top_level_nodes.append(HTMLNode("pre", None, [HTMLNode("code", block)]))
+            top_level_nodes.append(ParentNode("pre", [LeafNode("code", block.replace("```", ""))])) # TODO: Fix backticks being included in code blocks
         elif type == "quote":
             child_nodes = text_to_children(block.replace("> ", ""))
-            top_level_nodes.append(HTMLNode("blockquote", None, child_nodes))
+            top_level_nodes.append(ParentNode("blockquote", child_nodes))
         elif type == "unordered_list":
             list_elements = []
             for element in block.split("\n"):
-                list_elements.append(HTMLNode("li", None, text_to_children(element[2:])))
-            top_level_nodes.append(HTMLNode("ul", None, list_elements))
+                list_elements.append(ParentNode("li", text_to_children(element[2:])))
+            top_level_nodes.append(ParentNode("ul", list_elements))
         elif type == "ordered_list":
             list_elements = []
             for element in block.split("\n"):
-                list_elements.append(HTMLNode("li", None, text_to_children(element[3:])))
-            top_level_nodes.append(HTMLNode("ol", None, list_elements))
+                list_elements.append(ParentNode("li", text_to_children(element[3:])))
+            top_level_nodes.append(ParentNode("ol", list_elements))
         else:
             child_nodes = text_to_children(block)
-            top_level_nodes.append(HTMLNode("p", None, child_nodes))
-    return HTMLNode("div", None, top_level_nodes)
+            top_level_nodes.append(ParentNode("p", child_nodes))
+    return ParentNode("div", top_level_nodes)

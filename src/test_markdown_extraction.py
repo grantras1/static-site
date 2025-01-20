@@ -1,6 +1,7 @@
 import unittest
 
 from markdown_extraction import extract_markdown_links, extract_markdown_images
+from page_generation import extract_title
 
 class TestMarkdownExtraction(unittest.TestCase):
     def test_link_extraction(self):
@@ -18,6 +19,10 @@ class TestMarkdownExtraction(unittest.TestCase):
     def test_extraction_empty(self):
         images = extract_markdown_images("")
         self.assertEqual(images, [])
+
+    def test_extract_title(self):
+        markdown = "```this is some code```\n\nwith some regular paragraphs\n\n# real header"
+        self.assertEqual(extract_title(markdown), "real header")
 
 if __name__ == "__main__":
     unittest.main()

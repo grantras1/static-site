@@ -1,6 +1,8 @@
 import unittest
 
 from htmlnode import HTMLNode
+from parentnode import ParentNode
+from leafnode import LeafNode
 from markdown_blocks import markdown_to_blocks, block_to_block_type, markdown_to_html_node
 
 class TestMarkdownBlocks(unittest.TestCase):
@@ -53,20 +55,20 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 
     def test_markdown_to_html_node_multiple_blocks(self):
         multiple_blocks = "```test this is some code\nwith multiple lines\nand *fake* inline markdown```\n\n1. first element\n2. second element\n3. *third* element"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("pre", None, [
-                HTMLNode("code", "```test this is some code\nwith multiple lines\nand *fake* inline markdown```")
+        expected_result = ParentNode("div", None, [
+            ParentNode("pre", None, [
+                LeafNode("code", "```test this is some code\nwith multiple lines\nand *fake* inline markdown```")
             ]),
-            HTMLNode("ol", None, [
-                HTMLNode("li", None, [
-                    HTMLNode(None, "first element")
+            ParentNode("ol", None, [
+                ParentNode("li", None, [
+                    LeafNode(None, "first element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode(None, "second element")
+                ParentNode("li", None, [
+                    LeafNode(None, "second element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode("i", "third"),
-                    HTMLNode(None, " element")
+                ParentNode("li", None, [
+                    LeafNode("i", "third"),
+                    LeafNode(None, " element")
                 ])
             ])
         ])
@@ -74,61 +76,61 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 
     def test_markdown_to_html_node_header(self):
         header_markdown = "## **My** *Programming* Journey"
-        expected_result = HTMLNode("div", None, [
-                            HTMLNode("h2", None, [
-                                HTMLNode("b", "My"),
-                                HTMLNode(None, " "),
-                                HTMLNode("i", "Programming"),
-                                HTMLNode(None, " Journey")
+        expected_result = ParentNode("div", None, [
+                            ParentNode("h2", None, [
+                                LeafNode("b", "My"),
+                                LeafNode(None, " "),
+                                LeafNode("i", "Programming"),
+                                LeafNode(None, " Journey")
                             ])
                         ])
         self.assertEqual(markdown_to_html_node(header_markdown), expected_result)
 
     def test_markdown_to_html_node_paragraph(self):
         paragraph_markdown = "I started learning Python because it's **really beginner-friendly**. Here's what I've learned:"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("p", None, [
-                HTMLNode(None, "I started learning Python because it's "),
-                HTMLNode("b", "really beginner-friendly"),
-                HTMLNode(None, ". Here's what I've learned:")
+        expected_result = ParentNode("div", None, [
+            ParentNode("p", None, [
+                LeafNode(None, "I started learning Python because it's "),
+                LeafNode("b", "really beginner-friendly"),
+                LeafNode(None, ". Here's what I've learned:")
             ])
         ])
         self.assertEqual(markdown_to_html_node(paragraph_markdown), expected_result)
 
     def test_markdown_to_html_node_code(self):
         code_markdown = "```this is some code\nwith multiple lines\nand *fake* inline markdown```"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("pre", None, [
-                HTMLNode("code", "```this is some code\nwith multiple lines\nand *fake* inline markdown```")
+        expected_result = ParentNode("div", None, [
+            ParentNode("pre", None, [
+                LeafNode("code", "```this is some code\nwith multiple lines\nand *fake* inline markdown```")
             ])
         ])
         self.assertEqual(markdown_to_html_node(code_markdown), expected_result)
 
     def test_markdown_to_html_node_quote(self):
         quote_markdown = "> be me\n> writing tests longer *than* writing actual code\n> test **fails**"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("blockquote", None, [
-                HTMLNode(None, "be me\nwriting tests longer "),
-                HTMLNode("i", "than"),
-                HTMLNode(None, " writing actual code\ntest "),
-                HTMLNode("b", "fails")
+        expected_result = ParentNode("div", None, [
+            ParentNode("blockquote", None, [
+                LeafNode(None, "be me\nwriting tests longer "),
+                LeafNode("i", "than"),
+                LeafNode(None, " writing actual code\ntest "),
+                LeafNode("b", "fails")
             ])
         ])
         self.assertEqual(markdown_to_html_node(quote_markdown), expected_result)
     
     def test_markdown_to_html_node_unordered_list(self):
         ul_markdown = "* first element\n- second element\n* *third* element"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("ul", None, [
-                HTMLNode("li", None, [
-                    HTMLNode(None, "first element")
+        expected_result = ParentNode("div", None, [
+            ParentNode("ul", None, [
+                ParentNode("li", None, [
+                    LeafNode(None, "first element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode(None, "second element")
+                ParentNode("li", None, [
+                    LeafNode(None, "second element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode("i", "third"),
-                    HTMLNode(None, " element")
+                ParentNode("li", None, [
+                    LeafNode("i", "third"),
+                    LeafNode(None, " element")
                 ])
             ])
         ])
@@ -136,17 +138,17 @@ This is a paragraph of text. It has some **bold** and *italic* words inside of i
 
     def test_markdown_to_html_node_unordered_list(self):
         ol_markdown = "1. first element\n2. second element\n3. *third* element"
-        expected_result = HTMLNode("div", None, [
-            HTMLNode("ol", None, [
-                HTMLNode("li", None, [
-                    HTMLNode(None, "first element")
+        expected_result = ParentNode("div", None, [
+            ParentNode("ol", None, [
+                ParentNode("li", None, [
+                    LeafNode(None, "first element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode(None, "second element")
+                ParentNode("li", None, [
+                    LeafNode(None, "second element")
                 ]),
-                HTMLNode("li", None, [
-                    HTMLNode("i", "third"),
-                    HTMLNode(None, " element")
+                ParentNode("li", None, [
+                    LeafNode("i", "third"),
+                    LeafNode(None, " element")
                 ])
             ])
         ])
